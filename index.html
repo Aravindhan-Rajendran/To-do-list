@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://m.media-amazon.com/images/I/61YVYPgTDCL._AC_UF894,1000_QL80_.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="./style.css">
+    <title>To-Do List</title>
+</head>
+
+<body>
+    <section>
+        <div>
+            <h1>To-Do List</h1>
+            <div id="outer">
+                <div id="datareceive">
+                    <input type="text" id="texting" placeholder="Item Name">
+                    <input type="date" id="dating">
+                    <select id="selecting">
+                        <option disabled selected>Priority</option>
+                        <option>Low</option>
+                        <option>Medium</option>
+                        <option>Hard</option>
+                    </select>
+                    <button id="btn">Add Item</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <h2>Today's TodoList</h2>
+        <div class="box" id="todaylist"></div>
+    </section>
+    <section>
+        <h2>Future TodoList</h2>
+        <div class="box" id="futurelist"></div>
+    </section>
+    <section>
+        <h2>Complete TodoList</h2>
+        <div class="boxwhite" id="completelist"></div>
+    </section>
+    <script src="./script.js">
+    </script>
+</body>
+
+</html>
