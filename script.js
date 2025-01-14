@@ -1,134 +1,104 @@
-const btn = document.getElementById("btn");
-let todayCount = 0;
-let futureCount = 0;
-let completeCount = 0;
 
-btn.addEventListener('click', function showdata() {
-    const dat = new Date();
-    let day = dat.getDate().toString().padStart(2, '0');
-    let month = (dat.getMonth() + 1).toString().padStart(2, '0');
-    let year = dat.getFullYear();
-    let currentDate = `${day}-${month}-${year}`;
-    let text = document.getElementById("texting");
-    let date = document.getElementById("dating");
-    let dropdown = document.getElementById("selecting");
-    let todays = document.getElementById("todaylist");
-    let future = document.getElementById("futurelist");
-    let complete = document.getElementById("completelist");
+// Get elements
+const addTaskBtn = document.getElementById('add-task-btn');
+const taskInput = document.getElementById('task-input');
+const dateInput = document.getElementById('date-input');
+const priorityInput = document.getElementById('priority');
+const todayTasksContainer = document.getElementById('today-tasks');
+const futureTasksContainer = document.getElementById('future-tasks');
+const completedTasksContainer = document.getElementById('completed-tasks');
 
-    if (text.value === '' || date.value === '' || dropdown.value === 'Priority') {
-        alert("Please fill out all fields");
-        return;
-    }
+// Function to create a task element
+function createTaskElement(task, date, priority, id, isCompleted = false) {
+    const taskItem = document.createElement('div');
+    taskItem.classList.add('task-item');
+    taskItem.id = id;
+    taskItem.innerHTML = `
+<p class="task-name">${task} (${date}) <span class="priority-${priority}">${priority}</span></p>
+<div class="task-actions">
+  ${isCompleted ? '' : '<i class="fa fa-check-circle" aria-hidden="true" onclick="approveTask(\'' + id + '\')"></i>'}
+  <i class="fa fa-trash-alt" aria-hidden="true" onclick="deleteTask('${id}')"></i>
+</div>
+`;
+    return taskItem;
+}
 
-    let inputDate = new Date(date.value);
-    let inputDay = inputDate.getDate().toString().padStart(2, '0');
-    let inputMonth = (inputDate.getMonth() + 1).toString().padStart(2, '0');
-    let inputYear = inputDate.getFullYear();
-    let formattedInputDate = `${inputDay}-${inputMonth}-${inputYear}`;
+// Function to approve a task (move to completed tasks)
+function approveTask(id) {
+    const taskItem = document.getElementById(id);
+    completedTasksContainer.appendChild(taskItem);
+    taskItem.classList.add('approved');
+    updateLocalStorage();
+}
 
-    // Prevent duplicate items
-    if (isDuplicate(todays, text.value, formattedInputDate) || isDuplicate(future, text.value, formattedInputDate)) {
-        alert("This item already exists in the list");
-        return;
-    }
+// Function to delete a task
+function deleteTask(id) {
+    const taskItem = document.getElementById(id);
+    taskItem.remove();
+    updateLocalStorage();
+}
 
-    let todoItem = document.createElement("div");
-    todoItem.className = "todo-item";
+// Function to add a task to the correct section
+function addTask() {
+    const task = taskInput.value;
+    const date = dateInput.value;
+    const priority = priorityInput.value;
 
-    let serialNumber = document.createElement("div");
-    serialNumber.setAttribute("id", "serial");
+    if (task && date) {
+        const taskId = `task-${Date.now()}`;
+        const taskElement = createTaskElement(task, date, priority, taskId);
 
-    let textData = document.createElement("div");
-    textData.innerText = text.value;
-
-    let dateData = document.createElement("div");
-    dateData.innerText = formattedInputDate;
-
-    let selected = document.createElement("div");
-    selected.innerText = dropdown.value;
-
-    let choose = document.createElement("div");
-    choose.innerHTML = `<img src="https://surjeet-todo-list.netlify.app/img/check-circle%201.png" style="width:50px;height:30px;padding-right:20px;"><img src="https://surjeet-todo-list.netlify.app/img/trash%201.png" style="width:30px;height:30px;">`;
-
-    choose.children[0].addEventListener('click', function () {
-        todoItem.remove();
-        textData.style.color = 'black';
-        dateData.style.color = 'black';
-        selected.style.color = 'black';
-        serialNumber.style.color = 'black';
-
-        let delet = document.createElement("div");
-        delet.innerHTML = `<img src="https://surjeet-todo-list.netlify.app/img/2.png" style="width:50px;height:30px;padding-right:20px;">`;
-        complete.style = 'border:2px solid black;border-radius:10px;padding:15px 0px';
-        choose.children[0].remove();
-        todoItem.appendChild(delet);
-        complete.appendChild(todoItem);
-        completeCount++;
-        updateSerialNumbers(complete);
-
-        delet.addEventListener('click', function () {
-            todoItem.remove();
-            completeCount--;
-            updateSerialNumbers(complete);
-        });
-    });
-
-    choose.children[1].addEventListener('click', function () {
-        todoItem.remove();
-        if (formattedInputDate === currentDate) {
-            todayCount--;
-            updateSerialNumbers(todays);
-        } else if (new Date(inputDate) > new Date(dat)) {
-            futureCount--;
-            updateSerialNumbers(future);
+        // If the task date is today, add to today's tasks, else future tasks
+        const today = new Date().toISOString().split('T')[0];
+        if (date === today) {
+            todayTasksContainer.appendChild(taskElement);
+        } else {
+            futureTasksContainer.appendChild(taskElement);
         }
+
+        // Save task to localStorage
+        updateLocalStorage();
+
+        // Clear input fields
+        taskInput.value = '';
+        dateInput.value = '';
+        priorityInput.value = 'low';
+    }
+}
+
+// Function to update localStorage
+function updateLocalStorage() {
+    const todayTasks = Array.from(todayTasksContainer.children).map(task => task.id);
+    const futureTasks = Array.from(futureTasksContainer.children).map(task => task.id);
+    const completedTasks = Array.from(completedTasksContainer.children).map(task => task.id);
+
+    localStorage.setItem('todayTasks', JSON.stringify(todayTasks));
+    localStorage.setItem('futureTasks', JSON.stringify(futureTasks));
+    localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
+}
+
+// Function to load tasks from localStorage
+function loadTasks() {
+    const todayTasks = JSON.parse(localStorage.getItem('todayTasks')) || [];
+    const futureTasks = JSON.parse(localStorage.getItem('futureTasks')) || [];
+    const completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || [];
+
+    todayTasks.forEach(taskId => {
+        const taskElement = createTaskElement('Task', '2025-01-01', 'low', taskId); // Placeholder data
+        todayTasksContainer.appendChild(taskElement);
     });
-
-    todoItem.appendChild(serialNumber);
-    todoItem.appendChild(textData);
-    todoItem.appendChild(dateData);
-    todoItem.appendChild(selected);
-    todoItem.appendChild(choose);
-
-    if (formattedInputDate === currentDate) {
-        todayCount++;
-        todays.appendChild(todoItem);
-        updateSerialNumbers(todays);
-    } else if (new Date(inputDate) > new Date(dat)) {
-        futureCount++;
-        future.appendChild(todoItem);
-        updateSerialNumbers(future);
-    } else {
-        alert("You cannot enter a past date");
-        return;
-    }
-
-    text.value = '';
-    date.value = '';
-    dropdown.selectedIndex = 0;
-    updateCounts();
-});
-
-function updateSerialNumbers(listElement) {
-    let items = listElement.getElementsByClassName('todo-item');
-    for (let i = 0; i < items.length; i++) {
-        items[i].children[0].innerText = `${i + 1}.`;
-    }
+    futureTasks.forEach(taskId => {
+        const taskElement = createTaskElement('Task', '2025-01-01', 'medium', taskId); // Placeholder data
+        futureTasksContainer.appendChild(taskElement);
+    });
+    completedTasks.forEach(taskId => {
+        const taskElement = createTaskElement('Task', '2025-01-01', 'high', taskId, true); // Placeholder data
+        completedTasksContainer.appendChild(taskElement);
+    });
 }
 
-function isDuplicate(listElement, text, date) {
-    let items = listElement.getElementsByClassName('todo-item');
-    for (let item of items) {
-        if (item.children[1].innerText === text && item.children[2].innerText === date) {
-            return true;
-        }
-    }
-    return false;
-}
+// Event listener for Add Task button
+addTaskBtn.addEventListener('click', addTask);
 
-function updateCounts() {
-    document.getElementById("today-count").innerText = `Today's Tasks: ${todayCount}`;
-    document.getElementById("future-count").innerText = `Future Tasks: ${futureCount}`;
-    document.getElementById("complete-count").innerText = `Completed Tasks: ${completeCount}`;
-}
+// Load tasks from localStorage when the page loads
+window.onload = loadTasks;

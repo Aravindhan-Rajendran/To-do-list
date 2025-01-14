@@ -1,182 +1,157 @@
-* {
+
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-}
-
-#datareceive {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-    flex-wrap: wrap;
-}
-
-#outer {
-    margin-left: 30px;
-    margin-right: 30px;
-}
-
-h1 {
-    text-align: center;
-    font-size: 70px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-#texting,
-#dating,
-#selecting,
-#btn {
-    margin-bottom: 10px;
-}
-
-#texting {
-    width: 38%;
-    height: 50px;
-    border: 2px solid black;
-    font-size: 1.2rem;
-    padding-left: 20px;
-}
-
-#dating {
-    width: 20%;
-    height: 50px;
-    border: 2px solid black;
-    font-size: 1.2rem;
-    padding-left: 20px;
-}
-
-#selecting {
-    width: 20%;
-    height: 50px;
-    border: 2px solid black;
-    font-size: 1.2rem;
-    padding-left: 20px;
-}
-
-#btn {
-    width: 10%;
-    height: 50px;
-    border: 2px solid black;
-    background-color: black;
-    color: white;
-    cursor: pointer;
-    font-size: 1.2rem;
-}
-
-#btn:hover {
-    background-color: gray;
-    color: black;
+    background-color: #f4f4f9;
 }
 
 h2 {
-    margin-top: 50px;
-    font-size: 40px;
-    margin-bottom: 20px;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.5em;
 }
 
-.box {
-    background-color: black;
-    width: 95%;
-    border-radius: 10px;
-    margin: auto;
+.task-section {
+    margin: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff;
 }
 
-.boxwhite {
-    background-color: white;
-    width: 95%;
-    border-radius: 10px;
-    margin: auto;
-    color: black;
+.task-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-.todo-item {
+/* Input and Buttons */
+input,
+select,
+button {
+    padding: 12px;
+    margin-bottom: 10px;
+    width: 20%;
+    font-size: 1em;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+button.add-task-btn {
+    background-color: green;
+    /* Green color for Add Task button */
+    color: white;
+    cursor: pointer;
+    border: none;
+    font-size: 1.1em;
+}
+
+button.add-task-btn:hover {
+    background-color: darkgreen;
+}
+
+/* Task Items */
+.task-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 30px;
-    color: white;
-    margin-bottom: 10px;
-    padding: 20px;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
 }
 
-.todo-item div {
-    flex: 1;
-    padding: 0 10px;
-    word-break: break-word;
+.task-item.approved {
+    background-color: #c8e6c9;
 }
 
-.todo-item img {
-    width: 30px;
-    height: 30px;
+.task-item .task-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.task-item p {
+    font-size: 1em;
+    font-weight: bold;
+    color: #333;
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.priority-low {
+    color: green;
+}
+
+.priority-medium {
+    color: orange;
+}
+
+.priority-high {
+    color: red;
+}
+
+.task-actions i {
+    font-size: 20px;
     cursor: pointer;
 }
 
+/* Mobile Responsive */
 @media (max-width: 768px) {
-    h1 {
-        font-size: 50px;
+    .task-container {
+        gap: 10px;
     }
 
-    #texting {
+    h2 {
+        font-size: 1.2em;
+    }
+
+    input,
+    select,
+    button {
         width: 100%;
-        margin-bottom: 10px;
+        font-size: 1em;
     }
 
-    #dating {
-        width: 100%;
-        margin-bottom: 10px;
+    .task-item p {
+        font-size: 0.9em;
+        margin-right: 5px;
+        word-wrap: break-word;
     }
 
-    #selecting {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    #btn {
-        width: 100%;
-    }
-
-    .todo-item {
-        font-size: 24px;
+    .task-item {
         flex-direction: column;
-        align-items: flex-start;
+        gap: 10px;
     }
 
-    .todo-item div {
-        padding: 5px 0;
+    .task-item .task-actions {
+        flex-direction: column;
     }
 
-    .todo-item img {
-        width: 25px;
-        height: 25px;
+    .task-section {
+        margin: 10px;
+        padding: 15px;
     }
 }
 
 @media (max-width: 480px) {
-    h1 {
-        font-size: 36px;
-    }
-
-    h2 {
-        font-size: 28px;
-    }
-
-    .box,
-    .boxwhite {
-        width: 100%;
+    .task-section {
+        margin: 10px 5px;
         padding: 10px;
     }
 
-    .todo-item {
-        font-size: 20px;
+    .task-item {
+        padding: 12px;
     }
 
-    .todo-item img {
-        width: 20px;
-        height: 20px;
+    .task-item p {
+        font-size: 0.8em;
+    }
+
+    button {
+        font-size: 0.9em;
+        padding: 10px;
     }
 }

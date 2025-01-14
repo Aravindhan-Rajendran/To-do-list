@@ -4,44 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
     <link rel="icon" href="https://m.media-amazon.com/images/I/61YVYPgTDCL._AC_UF894,1000_QL80_.jpg" type="image/x-icon">
-    <link rel="stylesheet" href="./style.css">
-    <title>To-Do List</title>
-</head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
 
+</head>
 <body>
-    <section>
-        <div>
-            <h1>To-Do List</h1>
-            <div id="outer">
-                <div id="datareceive">
-                    <input type="text" id="texting" placeholder="Item Name">
-                    <input type="date" id="dating">
-                    <select id="selecting">
-                        <option disabled selected>Priority</option>
-                        <option>Low</option>
-                        <option>Medium</option>
-                        <option>Hard</option>
-                    </select>
-                    <button id="btn">Add Item</button>
-                </div>
-            </div>
+    <div class="task-manager">
+        <h2>TO DO List</h2>
+        <div class="task-input-section" style="display: flex;justify-content: space-between;">
+            <input type="text" id="task-input" placeholder="Enter task...">
+            <input type="date" id="date-input">
+            <select id="priority">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+            <button id="add-task-btn" class="add-task-btn">Add Task</button>
         </div>
-    </section>
-    <section>
-        <h2>Today's TodoList</h2>
-        <div class="box" id="todaylist"></div>
-    </section>
-    <section>
-        <h2>Future TodoList</h2>
-        <div class="box" id="futurelist"></div>
-    </section>
-    <section>
-        <h2>Complete TodoList</h2>
-        <div class="boxwhite" id="completelist"></div>
-    </section>
-    <script src="./script.js">
-    </script>
+    </div>
+    <div class="task-section">
+        <h3>Today's Tasks</h3>
+        <div class="task-container" id="today-tasks"></div>
+    </div>
+
+    <div class="task-section">
+        <h3>Future Tasks</h3>
+        <div class="task-container" id="future-tasks"></div>
+    </div>
+
+    <div class="task-section">
+        <h3>Completed Tasks</h3>
+        <div class="task-container" id="completed-tasks"></div>
+    </div>
+
 </body>
 
 </html>
