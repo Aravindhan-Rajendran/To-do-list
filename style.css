@@ -63,7 +63,11 @@ button.add-task-btn:hover {
     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
     flex-wrap: wrap;
 }
-
+.task-item .priority-low,
+.task-item .priority-medium,
+.task-item .priority-high {
+    margin-left: 10px;
+}
 .task-item.approved {
     background-color: #c8e6c9;
 }
@@ -79,6 +83,9 @@ button.add-task-btn:hover {
     color: #333;
     flex-grow: 1;
     margin-right: 10px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .priority-low {

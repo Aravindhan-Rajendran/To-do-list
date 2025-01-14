@@ -14,11 +14,11 @@ function createTaskElement(task, date, priority, id, isCompleted = false) {
     taskItem.classList.add('task-item');
     taskItem.id = id;
     taskItem.innerHTML = `
-<p class="task-name">${task} (${date}) <span class="priority-${priority}">${priority}</span></p>
-<div class="task-actions">
+<p class="task-name">${task} <span>${date}</span> <span class="priority-${priority}">${priority}</span><span class="task-actions">
   ${isCompleted ? '' : '<i class="fa fa-check-circle" aria-hidden="true" onclick="approveTask(\'' + id + '\')"></i>'}
   <i class="fa fa-trash-alt" aria-hidden="true" onclick="deleteTask('${id}')"></i>
-</div>
+</span></p>
+
 `;
     return taskItem;
 }
@@ -44,27 +44,32 @@ function addTask() {
     const date = dateInput.value;
     const priority = priorityInput.value;
 
-    if (task && date) {
-        const taskId = `task-${Date.now()}`;
-        const taskElement = createTaskElement(task, date, priority, taskId);
-
-        // If the task date is today, add to today's tasks, else future tasks
-        const today = new Date().toISOString().split('T')[0];
-        if (date === today) {
-            todayTasksContainer.appendChild(taskElement);
-        } else {
-            futureTasksContainer.appendChild(taskElement);
-        }
-
-        // Save task to localStorage
-        updateLocalStorage();
-
-        // Clear input fields
-        taskInput.value = '';
-        dateInput.value = '';
-        priorityInput.value = 'low';
+    // Check if all fields are filled
+    if (!task || !date || !priority) {
+        alert('Please fill all the fields');
+        return;
     }
+
+    const taskId = `task-${Date.now()}`;
+    const taskElement = createTaskElement(task, date, priority, taskId);
+
+    // If the task date is today, add to today's tasks, else future tasks
+    const today = new Date().toISOString().split('T')[0];
+    if (date === today) {
+        todayTasksContainer.appendChild(taskElement);
+    } else {
+        futureTasksContainer.appendChild(taskElement);
+    }
+
+    // Save task to localStorage
+    updateLocalStorage();
+
+    // Clear input fields
+    taskInput.value = '';
+    dateInput.value = '';
+    priorityInput.value = 'low';
 }
+
 
 // Function to update localStorage
 function updateLocalStorage() {
